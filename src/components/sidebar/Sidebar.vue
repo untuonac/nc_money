@@ -2,7 +2,7 @@
   <router-view
     v-if="sidebarVisible"
     name="sidebar"
-    class="h-[calc(100vh-50px)]"
+    class="min-w-[400px]"
   />
 </template>
 
@@ -12,7 +12,7 @@
   export default defineComponent({
     computed: {
       sidebarVisible() {
-        return this.$route.meta.showSidebar;
+        return this.$route.meta?.showSidebar;
       }
     }
   });
