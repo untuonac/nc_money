@@ -15,6 +15,7 @@ export default new VueRouter({
     },
     {
       path: '/account/:accountId',
+      name: 'account-view',
       components: {
         default: AccountView,
         sidebar: Sidebar
