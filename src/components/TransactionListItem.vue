@@ -70,6 +70,10 @@
           @value-changed="handleValueChanged"
         />
       </template>
+
+      <template #actionLast>
+        <DotsHorizontal @click="handleOpenSidebar" />
+      </template>
     </TransactionListItemTemplate>
     <div
       v-if="transaction.showSplits"
@@ -105,6 +109,7 @@
 
   import ChevronRight from 'vue-material-design-icons/ChevronRight.vue';
   import ChevronDown from 'vue-material-design-icons/ChevronDown.vue';
+  import DotsHorizontal from 'vue-material-design-icons/DotsHorizontal.vue';
 
   import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon';
 
@@ -207,6 +212,12 @@
     methods: {
       toggleSplits() {
         this.transaction.showSplits = !this.transaction.showSplits;
+      },
+      handleOpenSidebar() {
+        this.$router.push({
+          name: 'transaction-details',
+          params: { transactionId: this.transaction.id }
+        });
       },
       async handleTransactionChanged() {
         this.isLoading = true;
@@ -314,7 +325,8 @@
       ChevronRight,
       ChevronDown,
       NcLoadingIcon,
-      TransactionListItemTemplate
+      TransactionListItemTemplate,
+      DotsHorizontal
     }
   });
 </script>
