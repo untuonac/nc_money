@@ -40,7 +40,8 @@ export default new VueRouter({
           props: {
             sidebar: (route) => {
               return {
-                transactionId: Number(route.params.transactionId)
+                transactionId: Number(route.params.transactionId),
+                accountId: Number(route.params.accountId)
               };
             }
           }

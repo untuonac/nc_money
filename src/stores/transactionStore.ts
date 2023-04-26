@@ -70,6 +70,19 @@ export const useTransactionStore = defineStore('transactionStore', () => {
     }, callback);
   }
 
+  function watchForId(transactionId: number, callback: (transaction: Transaction) => void): Promise<{
+    stop: () => void;
+  }> {
+    return watch(transactionsTable, {
+      where: {
+        id: transactionId
+      }
+    }, (transactions) => {
+      const transaction = transactions[0];
+      if(transaction) callback(transaction)
+    })
+  }
+
   async function insertTransactions(transactions: Array<Transaction>): Promise<void> {
     for (const transaction of transactions) {
       await insertTransaction(transaction);
@@ -129,6 +142,7 @@ export const useTransactionStore = defineStore('transactionStore', () => {
     getSortedByDate,
 
     watchAll,
+    watchForId,
 
     insertTransaction,
     insertTransactions,
