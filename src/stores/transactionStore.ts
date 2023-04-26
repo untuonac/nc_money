@@ -155,7 +155,4 @@ export type Transaction = {
   description: string;
   date: Date;
   timestampAdded: number;
-
-  // we save this here to keep state used for transaction list item height
-  showSplits: boolean;
 };

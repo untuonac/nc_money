@@ -20,12 +20,10 @@
       }"
     >
       <template #actionFirst>
-        <div @click="toggleSplits">
+        <div>
           <NcLoadingIcon
             v-if="isLoading"
           />
-          <ChevronDown v-else-if="transaction.showSplits" />
-          <ChevronRight v-else />
         </div>
       </template>
 
@@ -75,40 +73,12 @@
         <DotsHorizontal @click="handleOpenSidebar" />
       </template>
     </TransactionListItemTemplate>
-    <div
-      v-if="transaction.showSplits"
-      class="
-        bg-gray-100
-        shadow-inner
-        dark:bg-background-darker
-      "
-    >
-      <SplitListItem
-        v-for="split in splits"
-        :key="split.id"
-        :split="split"
-        :excluded-account-ids="
-          excludedSplitAccountIds.filter((aId) => aId !== split.destAccountId)
-        "
-        :inverted-value="invertedValue"
-        @split-deleted="handleSplitDeleted"
-      />
-      <NewSplitInput
-        v-if="isUnbalanced"
-        :transaction-id="transaction.id"
-        :excluded-account-ids="excludedSplitAccountIds"
-        :initial-value="-unbalancedValue"
-        :inverted-value="invertedValue"
-      />
-    </div>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, type PropType } from 'vue';
 
-  import ChevronRight from 'vue-material-design-icons/ChevronRight.vue';
-  import ChevronDown from 'vue-material-design-icons/ChevronDown.vue';
   import DotsHorizontal from 'vue-material-design-icons/DotsHorizontal.vue';
 
   import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon';
@@ -121,10 +91,8 @@
   import { useSplitService } from '../services/splitService';
 
   import TransactionListItemTemplate from './TransactionListItemTemplate.vue';
-  import SplitListItem from './SplitListItem.vue';
   import AccountSelect from './AccountSelect.vue';
   import CurrencyInput from './CurrencyInput.vue';
-  import NewSplitInput from './NewSplitInput.vue';
   import SeamlessInput from './SeamlessInput.vue';
   import DateInput from './DateInput.vue';
 
@@ -190,7 +158,7 @@
         return this.splitOfDestinationAccount?.destAccountId;
       },
       valueIsEditable() {
-        return !this.transaction.showSplits && !this.hasMultipleDestinationSplits;
+        return !this.hasMultipleDestinationSplits;
       },
       unbalancedValue() {
         return this.splits.reduce((value, s) => (value += s.value), 0.0);
@@ -210,9 +178,6 @@
       }
     },
     methods: {
-      toggleSplits() {
-        this.transaction.showSplits = !this.transaction.showSplits;
-      },
       handleOpenSidebar() {
         this.$router.push({
           name: 'transaction-details',
@@ -316,14 +281,10 @@
       };
     },
     components: {
-      SplitListItem,
       CurrencyInput,
       AccountSelect,
-      NewSplitInput,
       SeamlessInput,
       DateInput,
-      ChevronRight,
-      ChevronDown,
       NcLoadingIcon,
       TransactionListItemTemplate,
       DotsHorizontal

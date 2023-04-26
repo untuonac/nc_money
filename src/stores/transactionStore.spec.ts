@@ -18,8 +18,7 @@ describe('transactionStore', () => {
       id: 0,
       description: '',
       date: new Date(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
 
     await transactionStore.insertTransaction(transaction);
@@ -34,8 +33,7 @@ describe('transactionStore', () => {
       id: 0,
       description: '',
       date: new Date(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
 
     await transactionStore.insertTransaction(transaction);
@@ -51,15 +49,13 @@ describe('transactionStore', () => {
       id: 0,
       description: '',
       date: new Date(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
     const transaction2 = {
       id: 1,
       description: '',
       date: new Date(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
 
     await transactionStore.insertTransactions([ transaction1, transaction2 ]);
@@ -75,8 +71,7 @@ describe('transactionStore', () => {
       id: 0,
       description: '',
       date: new Date(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
     const split1 = {
       id: 0,
@@ -91,8 +86,7 @@ describe('transactionStore', () => {
       id: 1,
       description: '',
       date: new Date(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
     const split2 = {
       id: 1,
@@ -118,15 +112,13 @@ describe('transactionStore', () => {
       id: 0,
       description: '',
       date: date.toDate(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
     const transaction2 = {
       id: 1,
       description: '',
       date: date.add(1, 'day').toDate(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
 
     await transactionStore.insertTransactions([ transaction1, transaction2 ]);
@@ -141,15 +133,13 @@ describe('transactionStore', () => {
       id: 0,
       description: '',
       date: new Date(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
     const transaction2 = {
       id: 1,
       description: '',
       date: new Date(),
-      timestampAdded: Date.now(),
-      showSplits: false
+      timestampAdded: Date.now()
     };
 
     await transactionStore.insertTransactions([ transaction1, transaction2 ]);
