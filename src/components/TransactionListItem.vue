@@ -70,7 +70,12 @@
       </template>
 
       <template #actionLast>
+        <Close
+           v-if="isOpenInSidebar"
+           @click="handleCloseSidebar"
+        />
         <MenuOpen
+          v-else
           @click="handleOpenSidebar"
         />
       </template>
@@ -82,6 +87,7 @@
   import { defineComponent, type PropType } from 'vue';
 
   import MenuOpen from 'vue-material-design-icons/MenuOpen.vue';
+  import Close from 'vue-material-design-icons/Close.vue';
 
   import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon';
 
@@ -177,6 +183,9 @@
       },
       excludedSplitAccountIds() {
         return this.splits.map((s) => s.destAccountId);
+      },
+      isOpenInSidebar() {
+        return this.$route.params.transactionId?.toString() === this.transaction.id.toString();
       }
     },
     methods: {
@@ -185,6 +194,11 @@
           name: 'transaction-details',
           params: { transactionId: this.transaction.id.toString() }
         });
+      },
+      handleCloseSidebar() {
+        this.$router.push({
+          name: 'account-view'
+        })
       },
       async handleTransactionChanged() {
         this.isLoading = true;
@@ -289,7 +303,8 @@
       DateInput,
       NcLoadingIcon,
       TransactionListItemTemplate,
-      MenuOpen
+      MenuOpen,
+      Close
     }
   });
 </script>
