@@ -181,7 +181,7 @@
       handleOpenSidebar() {
         this.$router.push({
           name: 'transaction-details',
-          params: { transactionId: this.transaction.id }
+          params: { transactionId: this.transaction.id.toString() }
         });
       },
       async handleTransactionChanged() {
