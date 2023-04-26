@@ -70,7 +70,9 @@
       </template>
 
       <template #actionLast>
-        <DotsHorizontal @click="handleOpenSidebar" />
+        <MenuOpen
+          @click="handleOpenSidebar"
+        />
       </template>
     </TransactionListItemTemplate>
   </div>
@@ -79,7 +81,7 @@
 <script lang="ts">
   import { defineComponent, type PropType } from 'vue';
 
-  import DotsHorizontal from 'vue-material-design-icons/DotsHorizontal.vue';
+  import MenuOpen from 'vue-material-design-icons/MenuOpen.vue';
 
   import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon';
 
@@ -287,7 +289,7 @@
       DateInput,
       NcLoadingIcon,
       TransactionListItemTemplate,
-      DotsHorizontal
+      MenuOpen
     }
   });
 </script>
