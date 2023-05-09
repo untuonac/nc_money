@@ -19,7 +19,7 @@
     <template #account>
       <AccountSelect
         :account-id="destAccountId"
-        :excluded-account-ids="[accountId]"
+        :excluded-account-ids="[ accountId ]"
         @account-changed="(accountId) => (destAccountId = accountId)"
       />
     </template>
@@ -27,9 +27,12 @@
     <template #amount>
       <CurrencyInput
         :value="value"
+        :enable-convert-rate="enableConvertRate"
+        :convert-rate="convertRate"
         :placeholder="t('money', 'Value')"
         :inverted-value="invertedValue"
         @value-changed="(newValue) => (value = newValue)"
+        @convert-rate-changed="(newConvertRate) => (convertRate = newConvertRate)"
       />
     </template>
 
@@ -54,7 +57,9 @@
 
   import { useTransactionService } from '../services/transactionService';
 
-  import Plus from 'vue-material-design-icons/Plus.vue'
+  import { useAccountStore } from '../stores/accountStore';
+
+  import Plus from 'vue-material-design-icons/Plus.vue';
 
   import TransactionListItemTemplate from './TransactionListItemTemplate.vue';
   import AccountSelect from './AccountSelect.vue';
@@ -79,10 +84,20 @@
         description: '',
         destAccountId: null,
         value: 0.0,
+        convertRate: 1.0,
         isLoading: false
       };
     },
     computed: {
+      account() {
+        return this.accountStore.getById(this.accountId);
+      },
+      destAccount() {
+        return this.destAccountId ? this.accountStore.getById(this.destAccountId) : null;
+      },
+      enableConvertRate() {
+        return !!this.account && !!this.destAccount && this.account.currency !== this.destAccount.currency;
+      },
       isValid() {
         return NumberUtils.areNotEqual(this.value, 0.0);
       }
@@ -98,7 +113,7 @@
           date: this.date,
           description: this.description,
           value: -this.value,
-          convertRate: 1.0,
+          convertRate: 1 / this.convertRate,
           srcAccountId: this.accountId,
           destAccountId: this.destAccountId
         });
@@ -112,7 +127,8 @@
     },
     setup() {
       return {
-        transactionService: useTransactionService()
+        transactionService: useTransactionService(),
+        accountStore: useAccountStore()
       };
     },
     components: {
