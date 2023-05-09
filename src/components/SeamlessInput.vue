@@ -1,21 +1,42 @@
 <template>
-  <input
+  <div
     class="
+      flex
+      items-center
+
       w-full
-      overflow-hidden text-ellipsis
+      h-[36px]
+
+      border-2
+      border-solid
       border-transparent
-      bg-inherit
+      rounded-large
+
       hover:border-primary-element
       focus:border-primary-element
       disabled:text-text-maxcontrast disabled:hover:border-transparent
     "
-    type="text"
-    :placeholder="placeholder + '...'"
-    :disabled="disabled"
-    v-model="inputValue"
-    @change="handleValueChange"
-    @focus="$event.target.select()"
   >
+    <slot name="pre"></slot>
+    <input
+      class="
+        my-0
+        flex-grow
+        w-full
+        overflow-hidden text-ellipsis
+        bg-inherit
+        border-none
+        border-0
+      "
+      type="text"
+      :placeholder="placeholder + '...'"
+      :disabled="disabled"
+      v-model="inputValue"
+      @change="handleValueChange"
+      @focus="$event.target.select()"
+    >
+    <slot name="post"></slot>
+  </div>
 </template>
 
 <script lang="ts">
