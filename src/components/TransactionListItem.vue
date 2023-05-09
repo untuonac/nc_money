@@ -100,6 +100,8 @@
         :excluded-account-ids="excludedSplitAccountIds"
         :initial-value="-unbalancedValue"
         :inverted-value="invertedValue"
+        :source-account-id="accountId"
+        :correction-factor="splitOfAccount?.convertRate"
       />
     </div>
   </div>

@@ -21,7 +21,10 @@
         :value="value"
         :placeholder="t('money', 'Value')"
         :inverted-value="invertedValue"
+        :enable-convert-rate="enableConvertRate"
+        :convert-rate="correctionFactor / convertRate"
         @value-changed="(newValue) => (value = newValue)"
+        @convert-rate-changed="(newConvertRate) => (convertRate = newConvertRate)"
       />
     </template>
 
@@ -45,6 +48,8 @@
   import { NumberUtils } from '../utils/numberUtils';
 
   import { useSplitService } from '../services/splitService';
+
+  import { useAccountStore } from '../stores/accountStore';
 
   import Plus from 'vue-material-design-icons/Plus.vue';
 
@@ -70,13 +75,27 @@
       invertedValue: {
         type: Boolean,
         default: false
+      },
+      sourceAccountId: {
+        type: Number
+      },
+      correctionFactor: {
+        type: Number,
+        default: 1.0
       }
     },
-    data() {
+    data(): {
+      description: string;
+      destAccountId: number|null;
+      value: number;
+      convertRate: number;
+      isLoading: boolean;
+    } {
       return {
         description: '',
         destAccountId: null,
         value: 0.0,
+        convertRate: 1.0,
         isLoading: false
       };
     },
@@ -88,6 +107,15 @@
     computed: {
       isValid() {
         return this.destAccountId != null && NumberUtils.areNotEqual(this.value, 0.0);
+      },
+      sourceAccount() {
+        return this.sourceAccountId ? this.accountStore.getById(this.sourceAccountId) : undefined;
+      },
+      destAccount() {
+        return this.destAccountId ? this.accountStore.getById(this.destAccountId) : undefined;
+      },
+      enableConvertRate() {
+        return !!this.sourceAccount && !!this.destAccount && this.sourceAccount.currency !== this.destAccount.currency;
       }
     },
     methods: {
@@ -104,7 +132,7 @@
           transactionId: this.transactionId,
           destAccountId: this.destAccountId,
           value: this.value,
-          convertRate: 1.0,
+          convertRate: this.correctionFactor / this.convertRate,
           description: this.description
         });
         this.isLoading = false;
@@ -118,7 +146,10 @@
       }
     },
     setup() {
-      return { splitService: useSplitService() };
+      return {
+        splitService: useSplitService(),
+        accountStore: useAccountStore()
+      };
     },
     mounted() {
       this.value = this.initialValue;
