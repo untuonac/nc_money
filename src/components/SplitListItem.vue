@@ -18,10 +18,13 @@
 
     <template #amount>
       <CurrencyInput
-        :value="split.value"
+        :value="value"
         :placeholder="t('money', 'Value')"
         :inverted-value="invertedValue"
+        :enable-convert-rate="enableConvertRate"
+        :convert-rate="convertRate / split.convertRate"
         @value-changed="handleValueChanged"
+        @convert-rate-changed="handleConvertRateChanged"
       />
     </template>
 
@@ -45,6 +48,8 @@
   import type { Split } from '../stores/splitStore';
   import { useSplitService } from '../services/splitService';
 
+  import { useAccountStore } from '../stores/accountStore';
+
   import TransactionListItemTemplate from './TransactionListItemTemplate.vue';
   import CurrencyInput from './CurrencyInput.vue';
   import AccountSelect from './AccountSelect.vue';
@@ -67,6 +72,13 @@
       invertedValue: {
         type: Boolean,
         default: false
+      },
+      accountId: {
+        type: Number
+      },
+      convertRate: {
+        type: Number,
+        default: 1.0
       }
     },
     emits: [ 'split-deleted' ],
@@ -74,6 +86,24 @@
       return {
         showLoadingIcon: false
       };
+    },
+    computed: {
+      sourceAccount() {
+        return this.accountId ? this.accountStore.getById(this.accountId) : undefined;
+      },
+      destAccount() {
+        return this.accountStore.getById(this.split.destAccountId);
+      },
+      enableConvertRate() {
+        return !!this.sourceAccount && !!this.destAccount && this.sourceAccount.currency !== this.destAccount.currency;
+      },
+      value() {
+        if (this.enableConvertRate) {
+          return this.split.value * this.split.convertRate / this.convertRate;
+        } else {
+          return this.split.value;
+        }
+      }
     },
     watch: {
       isLoading() {
@@ -83,6 +113,10 @@
     methods: {
       async handleValueChanged(value: number) {
         this.split.value = value;
+        await this.handleSplitChanged();
+      },
+      async handleConvertRateChanged(convertRate: number) {
+        this.split.convertRate = this.convertRate / convertRate;
         await this.handleSplitChanged();
       },
       handleDeleteSplit() {
@@ -111,7 +145,10 @@
       this.showLoadingIcon = this.isLoading;
     },
     setup() {
-      return { splitService: useSplitService() };
+      return {
+        splitService: useSplitService(),
+        accountStore: useAccountStore()
+      };
     },
     components: { CurrencyInput, AccountSelect, SeamlessInput, TransactionListItemTemplate }
   });

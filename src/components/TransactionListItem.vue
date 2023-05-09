@@ -90,6 +90,8 @@
           excludedSplitAccountIds.filter((aId) => aId !== split.destAccountId)
         "
         :inverted-value="invertedValue"
+        :account-id="account?.id"
+        :convert-rate="splitOfAccount?.convertRate"
         @split-deleted="handleSplitDeleted"
       />
       <NewSplitInput
