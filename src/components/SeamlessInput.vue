@@ -14,8 +14,10 @@
 
       hover:border-primary-element
       focus:border-primary-element
-      disabled:text-text-maxcontrast disabled:hover:border-transparent
     "
+    :class="{
+      'text-text-maxcontrast hover:border-transparent': disabled
+    }"
   >
     <slot name="pre"></slot>
     <input
