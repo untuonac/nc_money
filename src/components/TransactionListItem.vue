@@ -197,7 +197,7 @@
         return !this.transaction.showSplits && !this.hasMultipleDestinationSplits;
       },
       unbalancedValue() {
-        return this.splits.reduce((value, s) => (value += s.value), 0.0);
+        return this.splits.reduce((value, s) => (value += s.value * s.convertRate), 0.0) / (this.splitOfAccount?.convertRate ?? 1.0);
       },
       isUnbalanced() {
         return NumberUtils.areNotEqual(this.unbalancedValue, 0.0);
